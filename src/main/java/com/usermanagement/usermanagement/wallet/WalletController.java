@@ -25,6 +25,11 @@ public class WalletController {
         return walletService.createWallet(request);
     }
 
+    @GetMapping("/{id}")
+    public Wallet getWalletById(@PathVariable Integer id){
+        return walletService.getWalletById(id);
+    }
+
 
 }
 

@@ -1,5 +1,6 @@
 package com.usermanagement.usermanagement.wallet;
 
+import com.usermanagement.usermanagement.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -30,6 +31,11 @@ public class WalletService {
         Wallet wallet = new Wallet(nextId, request.walletName());
         walletList.add(wallet);
         return wallet;
+    }
+
+    public Wallet getWalletById(Integer id) {
+        return walletList.stream().filter(wallet -> wallet.id().equals(id)).findFirst()
+                .orElseThrow(() -> new NotFoundException("Wallet not found by Id"));
     }
 
 }
