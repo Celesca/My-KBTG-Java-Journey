@@ -1,5 +1,6 @@
 package com.usermanagement.usermanagement.wallet;
 
+import com.usermanagement.usermanagement.exception.InternalServiceException;
 import com.usermanagement.usermanagement.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +19,15 @@ public class WalletService {
             new Wallet(3, "Their Wallet")
     ));
 
-    public List<Wallet> getWalletList() {
+    public List<Wallet> getWalletList(){
+        // Assume that It's error
+        try {
+            callNormalService();
+        }
+        catch (Exception e) {
+            throw new InternalServiceException("Internal service exception with Normal service");
+
+        }
         return walletList;
     }
 
@@ -36,6 +45,11 @@ public class WalletService {
     public Wallet getWalletById(Integer id) {
         return walletList.stream().filter(wallet -> wallet.id().equals(id)).findFirst()
                 .orElseThrow(() -> new NotFoundException("Wallet not found by Id"));
+    }
+
+    private void callNormalService() {
+        // Assume that It's error
+        throw new RuntimeException();
     }
 
 }
