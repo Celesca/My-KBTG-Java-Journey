@@ -36,5 +36,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiExceptionResponse, HttpStatus.SERVICE_UNAVAILABLE);
     }
 
+    @ExceptionHandler(value = {DuplicationException.class})
+    public ResponseEntity<Object> handleDuplicationException(DuplicationException duplicationException) {
+        ApiExceptionResponse apiExceptionResponse = new ApiExceptionResponse(
+                duplicationException.getMessage(),
+                HttpStatus.BAD_REQUEST,
+                ZonedDateTime.now()
+        );
+
+        return new ResponseEntity<>(apiExceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
 
 }
