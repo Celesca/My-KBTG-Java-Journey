@@ -4,6 +4,8 @@ import com.usermanagement.usermanagement.exception.DuplicationException;
 import com.usermanagement.usermanagement.exception.InternalServiceException;
 import com.usermanagement.usermanagement.exception.NotFoundException;
 import com.usermanagement.usermanagement.mail.GoogleMailService;
+import com.usermanagement.usermanagement.mail.MailService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -16,7 +18,11 @@ import java.util.Optional;
 public class WalletService {
 
     // Injection
-    private GoogleMailService googleMailService;
+    private final MailService mailService;
+
+    public WalletService(@Qualifier("googleMail") MailService mailService) {
+        this.mailService = mailService;
+    }
 
     private List<Wallet> walletList = new ArrayList<>(List.of(
             new Wallet(1, "Saving house", "kbtg@gmail.com"),
@@ -24,7 +30,7 @@ public class WalletService {
             new Wallet(3, "Their Wallet", "cypher_gopher@hotmail.com")
     ));
 
-    public List<Wallet> getWalletList(){
+    public List<Wallet> getWalletList() {
         return walletList;
     }
 
@@ -45,6 +51,7 @@ public class WalletService {
         Wallet wallet = new Wallet(nextId, request.walletName(), request.email());
 
         walletList.add(wallet);
+        mailService.sendMail("admin@wallet.com", "Wallet created");
         return wallet;
     }
 

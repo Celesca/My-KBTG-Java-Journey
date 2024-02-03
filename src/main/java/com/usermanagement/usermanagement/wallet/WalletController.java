@@ -1,5 +1,6 @@
 package com.usermanagement.usermanagement.wallet;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -11,8 +12,9 @@ public class WalletController {
 
     private WalletService walletService;
 
-    public WalletController() {
-        this.walletService = new WalletService();
+    @Autowired
+    public WalletController(WalletService walletService) {
+        this.walletService = walletService;
     }
 
     @GetMapping("")

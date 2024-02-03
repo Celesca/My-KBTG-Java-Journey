@@ -21,7 +21,7 @@ public class GoogleMailService implements MailService {
     }
 
     public void sendMail(String to, String body) {
-        System.out.println("Sent by google");
+        System.out.println("Sent by google: " + url + ":" + port + " to " + to + " with body " + body);
     // TODO: Send email implementation
     }
 }
