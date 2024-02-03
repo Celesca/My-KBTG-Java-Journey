@@ -1,16 +1,16 @@
 package com.usermanagement.usermanagement.user;
 
 import com.usermanagement.usermanagement.mail.GoogleMailService;
+import com.usermanagement.usermanagement.mail.MailService;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
+@Component
 public class UserService {
-
-
-
 
     List<User> users = new ArrayList<>(
             List.of(
@@ -20,12 +20,9 @@ public class UserService {
             )
     );
 
-    private GoogleMailService googleMailService;
-
-    public UserService() {
-        this.googleMailService = new GoogleMailService();
-        this.googleMailService.setUrl("mail.google.com");
-        this.googleMailService.setPort("42");
+    private MailService mailService;
+    public UserService(@Qualifier("outlookMail") MailService mailService) {
+        this.mailService = mailService;
     }
 
     public List<User> getUsers(Optional<Boolean> active) {
@@ -42,7 +39,7 @@ public class UserService {
         users.add(user);
 
         // TODO: send the mail
-        googleMailService.sentEmail("dev@gmail.com" , "New user created");
+        mailService.sendMail("dev@gmail.com" , "New user created");
         return user;
     }
 

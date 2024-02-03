@@ -1,6 +1,7 @@
 package com.usermanagement.usermanagement.user;
 
 import com.usermanagement.usermanagement.mail.GoogleMailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,11 +11,11 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-
-    public UserController() {
-        GoogleMailService googleMailService = new GoogleMailService();
-        this.userService = new UserService();
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
+
     @GetMapping("api/users")
     public List<User> getUsers(@RequestParam("active") Optional<Boolean> active) {
         return userService.getUsers(active);
