@@ -3,6 +3,7 @@ package com.usermanagement.usermanagement.wallet;
 import com.usermanagement.usermanagement.exception.DuplicationException;
 import com.usermanagement.usermanagement.exception.InternalServiceException;
 import com.usermanagement.usermanagement.exception.NotFoundException;
+import com.usermanagement.usermanagement.mail.GoogleMailService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -13,6 +14,9 @@ import java.util.Optional;
 
 @Service
 public class WalletService {
+
+    // Injection
+    private GoogleMailService googleMailService;
 
     private List<Wallet> walletList = new ArrayList<>(List.of(
             new Wallet(1, "Saving house", "kbtg@gmail.com"),

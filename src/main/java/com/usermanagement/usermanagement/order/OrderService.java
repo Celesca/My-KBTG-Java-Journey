@@ -1,17 +1,18 @@
 package com.usermanagement.usermanagement.order;
 
 import com.usermanagement.usermanagement.mail.GoogleMailService;
+import com.usermanagement.usermanagement.mail.MailService;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OrderService {
-    private GoogleMailService googleMailService;
+    private MailService mailService;
 
-    public OrderService() {
-        this.googleMailService = new GoogleMailService();
-        this.googleMailService.setUrl("mail.google.com");
-        this.googleMailService.setPort("42");
+    public OrderService(MailService mailService) {
+        this.mailService = mailService;
     }
 
     public void createOrder() {
-        googleMailService.sentEmail("user@gmail.com", "Order created");
+        mailService.sendMail("user@gmail.com", "Order created");
     }
 }
