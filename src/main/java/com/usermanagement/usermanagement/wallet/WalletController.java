@@ -1,6 +1,9 @@
 package com.usermanagement.usermanagement.wallet;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -32,5 +35,20 @@ public class WalletController {
         return walletService.getWalletById(id);
     }
 
+    @PutMapping("/{id}")
+    public Wallet updateWallet(@Validated @RequestBody UpdateWalletRequest request, @PathVariable Integer id) {
+        return walletService.updateWallet(request, id);
+    }
 
+    @DeleteMapping("/{id}")
+    public String deleteWallet(@PathVariable Integer id) {
+        walletService.deleteWallet(id);
+        return "ok";
+    }
 }
+
+record UpdateWalletRequest(
+    @NotNull
+    @Size(min = 3, max = 20, message = "Wallet name must be between 3 and 20 characters")
+    String walletName)
+{ }
