@@ -1,0 +1,8 @@
+mail-provider:
+  google:
+    url: dev-smtp.google.com
+    url-port: 465
+
+#spring:
+#  profiles:
+#    active: prod

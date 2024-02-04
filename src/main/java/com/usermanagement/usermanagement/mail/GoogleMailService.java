@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 
 public class GoogleMailService implements MailService {
 
-    @Value("${mail-provider.googlemail.url}")
+    @Value("${mail-provider.google.url}")
     private String url;
-    @Value("${mail-provider.googlemail.port}")
+    @Value("${mail-provider.google.url-port}")
     private String port;
 
     public GoogleMailService() {
