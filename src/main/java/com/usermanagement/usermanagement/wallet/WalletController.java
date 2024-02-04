@@ -26,7 +26,7 @@ public class WalletController {
     }
 
     @PostMapping("")
-    public Wallet createWallet(@RequestBody WalletRequest request){
+    public Wallet createWallet(@RequestBody WalletRequestDto request){
         return walletService.createWallet(request);
     }
 

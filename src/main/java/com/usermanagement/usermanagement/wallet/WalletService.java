@@ -5,6 +5,7 @@ import com.usermanagement.usermanagement.exception.InternalServiceException;
 import com.usermanagement.usermanagement.exception.NotFoundException;
 import com.usermanagement.usermanagement.mail.GoogleMailService;
 import com.usermanagement.usermanagement.mail.MailService;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,69 +20,48 @@ public class WalletService {
 
     // Injection
     private final MailService mailService;
+    private final WalletRepository walletRepository;
 
-    public WalletService(@Qualifier("googleMail") MailService mailService) {
+    public WalletService(@Qualifier("googleMail") MailService mailService, WalletRepository walletRepository) {
         this.mailService = mailService;
+        this.walletRepository = walletRepository;
     }
 
-    private List<Wallet> walletList = new ArrayList<>(List.of(
-            new Wallet(1, "Saving house", "kbtg@gmail.com"),
-            new Wallet(2, "Your Wallet", "karunthorn@gmail.com"),
-            new Wallet(3, "Their Wallet", "cypher_gopher@hotmail.com")
-    ));
-
     public List<Wallet> getWalletList() {
+        List<Wallet> walletList = walletRepository.findAll();
         return walletList;
     }
 
-    public Wallet createWallet(WalletRequest request) {
-        walletList.stream().filter(wallet -> wallet.getEmail().equals(request.email()))
-                .findFirst()
-                .ifPresent(wallet -> {
-                    throw new DuplicationException("Wallet with email " + request.email() + " already exists.");
-                });
-
-        Optional<Integer> maxId = walletList.stream()
-                .map(Wallet::getId)
-                .max(Integer::compareTo);
-        int nextId = maxId.orElse(0) + 1;
-
-        Wallet wallet = new Wallet(nextId, request.walletName(), request.email());
-
-        walletList.add(wallet);
-        mailService.sendMail("admin@wallet.com", "Wallet created");
+    public Wallet createWallet(WalletRequestDto request) {
+        Wallet wallet = new Wallet();
+        wallet.setWalletName(request.walletName());
+        wallet.setActive(true);
+        walletRepository.save(wallet);
         return wallet;
     }
 
     public Wallet getWalletById(Integer id) {
-        return walletList.stream().filter(wallet -> wallet.getId().equals(id)).findFirst()
-                .orElseThrow(() -> new NotFoundException("Wallet not found by Id"));
+//        return walletList.stream().filter(wallet -> wallet.getId().equals(id)).findFirst()
+//                .orElseThrow(() -> new NotFoundException("Wallet not found by Id"));
+        return null;
     }
 
     public Wallet updateWallet(@RequestBody UpdateWalletRequest request, Integer id) {
-        getWalletById(id);
-
-
-        for (Wallet wallet: walletList) {
-            if (wallet.getId().equals(id)) {
-                wallet.setWalletName(request.walletName());
-                return wallet;
-            }
+        Optional<Wallet> optionalWallet = walletRepository.findById(Long.valueOf(id));
+        if (optionalWallet.isEmpty()) {
+            throw new BadRequestException("Invalid wallet id");
         }
 
-        throw new NotFoundException("Wallet not found by Id" + id);
+        String wallet = optionalWallet.get();
+        wallet.setWalletName(request.walletname());
 
+        return null;
     }
 
     public void deleteWallet(Integer id) {
-
-        getWalletById(id);
-
-        walletList.removeIf(wallet -> wallet.getId().equals(id));
+//        getWalletById(id);
+//
+//        walletList.removeIf(wallet -> wallet.getId().equals(id));
 
     }
-
-
-
-
 }

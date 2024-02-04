@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record WalletRequest(
+public record WalletRequestDto(
 
         @NotNull
         @Size(min = 3, max = 20, message = "Wallet name must be between 3 and 20 characters")
@@ -12,6 +12,4 @@ public record WalletRequest(
         @NotNull
         @Email(message = "Email should be valid")
         String email
-){
-
-}
+){ }
