@@ -35,18 +35,16 @@ public class WalletService {
     }
 
     public Wallet createWallet(WalletRequest request) {
-        walletList.stream().filter(wallet -> wallet.email().equals(request.email()))
+        walletList.stream().filter(wallet -> wallet.getEmail().equals(request.email()))
                 .findFirst()
                 .ifPresent(wallet -> {
                     throw new DuplicationException("Wallet with email " + request.email() + " already exists.");
                 });
 
         Optional<Integer> maxId = walletList.stream()
-                .map(Wallet::id)
+                .map(Wallet::getId)
                 .max(Integer::compareTo);
         int nextId = maxId.orElse(0) + 1;
-
-
 
         Wallet wallet = new Wallet(nextId, request.walletName(), request.email());
 
@@ -56,8 +54,34 @@ public class WalletService {
     }
 
     public Wallet getWalletById(Integer id) {
-        return walletList.stream().filter(wallet -> wallet.id().equals(id)).findFirst()
+        return walletList.stream().filter(wallet -> wallet.getId().equals(id)).findFirst()
                 .orElseThrow(() -> new NotFoundException("Wallet not found by Id"));
     }
+
+    public Wallet updateWallet(@RequestBody UpdateWalletRequest request, Integer id) {
+        getWalletById(id);
+
+
+        for (Wallet wallet: walletList) {
+            if (wallet.getId().equals(id)) {
+                wallet.setWalletName(request.walletName());
+                return wallet;
+            }
+        }
+
+        throw new NotFoundException("Wallet not found by Id" + id);
+
+    }
+
+    public void deleteWallet(Integer id) {
+
+        getWalletById(id);
+
+        walletList.removeIf(wallet -> wallet.getId().equals(id));
+
+    }
+
+
+
 
 }
