@@ -2,37 +2,57 @@ package com.usermanagement.usermanagement.wallet;
 
 // Record เป็น Invitable เปลี่ยนแปลงอะไรไม่ได้
 
+import com.usermanagement.usermanagement.profile.Profile;
+import jakarta.persistence.*;
+
+
+@Entity
+@Table(name = "wallet")
 public class Wallet {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String walletName;
-    private String email;
+    private Boolean active;
 
-    public Wallet(Integer id, String walletName, String email) {
-        this.id = id;
-        this.walletName = walletName;
-        this.email = email;
+    @ManyToOne
+    @JoinColumn(name = "profile_email")
+    private Profile profile;
+
+    public Wallet() {
+
     }
 
     public Integer getId() {
         return id;
     }
 
-    public String getWalletName() {
-        return walletName;
-    }
-    public String getEmail() {
-        return email;
-    }
-
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getWalletName() {
+        return walletName;
     }
 
     public void setWalletName(String walletName) {
         this.walletName = walletName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 }
