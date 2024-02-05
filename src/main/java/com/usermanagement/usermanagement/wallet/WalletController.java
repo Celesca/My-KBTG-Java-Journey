@@ -36,8 +36,8 @@ public class WalletController {
     }
 
     @PutMapping("/{id}")
-    public Wallet updateWallet(@Validated @RequestBody UpdateWalletRequest request, @PathVariable Integer id) {
-        return walletService.updateWallet(request, id);
+    public Wallet updateWallet(@Validated @RequestBody WalletUpdateDto requestDto, @PathVariable Integer id) {
+        return walletService.updateWallet(requestDto, id);
     }
 
     @DeleteMapping("/{id}")
