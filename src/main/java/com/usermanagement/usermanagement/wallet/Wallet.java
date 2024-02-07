@@ -4,6 +4,8 @@ package com.usermanagement.usermanagement.wallet;
 
 import com.usermanagement.usermanagement.profile.Profile;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 
 @Entity
@@ -13,11 +15,14 @@ public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @NotNull
+    @Size(min = 3, max = 20, message = "Wallet name must be between 3 and 20 characters")
     private String walletName;
     private Boolean active;
 
     @ManyToOne
-    @JoinColumn(name = "profile_email")
+    @JoinColumn(name = "profile_email", referencedColumnName = "email")
     private Profile profile;
 
     public Wallet() {
