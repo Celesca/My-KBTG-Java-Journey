@@ -42,4 +42,5 @@ public class Profile {
     public void setName(String name) {
         this.name = name;
     }
+
 }
